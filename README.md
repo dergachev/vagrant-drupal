@@ -10,14 +10,14 @@ vagrant plugin install vagrant-berkshelf
 ```
 
 If you have an existing Drupal codebase, ensure that it's located in
-`PROJECT\_ROOT/site/`.  If it's present, that folder will be mounted inside the
+`PROJECTROOT/site/`.  If it's present, that folder will be mounted inside the
 vm as `/vagrant/site`, and will be copied over to
 `/var/shared/sites/cooked.drupal/site` where it will be served by Apache.
-Otherwise, the `deploy\_drupal` cookbook will simply run `drush dl
+Otherwise, the `deploy-drupal` cookbook will simply run `drush dl
 drupal` to get you a clean D7 site.
 
 If you have an existing SQL dump you'd like to pull in, ensure that it's
-located in `PROJECT\_ROOT/db/dump.sql.gz`, and it will be used to populate the
+located in `PROJECTROOT/db/dump.sql.gz`, and it will be used to populate the
 empty database. Otherwise `drush site-install` will be run to initialize a
 the DB with a clean Drupal site.
 
@@ -37,7 +37,9 @@ drush sql-dump --gzip --result-file     # use this to run a backup; saved in und
 ```
 
 The newly created backup file will be automatically synced to the
-`PROJECT\_ROOT/db/` folder on your host machine.
+`PROJECTROOT/db/` folder on your host machine.
+
+## Git workflow
 
 At this point you're expected to manually manage the git status of your
 codebase. (We don't know how to do this yet).  If your source Drupal codebase
@@ -53,13 +55,16 @@ git remote add origin REPO_URL
 git push -u origin master
 ```
 
-IMPORTANT:
+### Warning
+
+There are currently serious problems with `deploy-drupal` and git:
+
 * settings-priv.php creation isn't implemented yet. 
   - Until this happens, committing settings.php into git will commit your
     (development) DB credentials too.
 * currently the chef resource 'bash[copy-drupal-site]' in `drupal\_deploy`
   makes it impossible to keep the Drupal site as a subfolder of the git repo
-  (eg PROJECT_ROOT/site).
+  (eg PROJECTROOT/site).
 
 ## Hacking on the deploy\_drupal cookbook
 
