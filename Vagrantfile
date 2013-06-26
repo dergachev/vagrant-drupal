@@ -16,7 +16,9 @@ Vagrant.configure("2") do |config|
 
   # install some convenience tools
   config.vm.provision :shell, :inline => <<-HEREDOC
-    apt-get install -y curl vim git sass compass
+    apt-get update
+    apt-get install -y curl vim git
+    # gem install sass compass
   HEREDOC
 
   # Installs the previously exported site code and SQL dump via deploy_drupal::default
