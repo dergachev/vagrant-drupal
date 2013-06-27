@@ -18,7 +18,7 @@ This guide will cover the workflow around 3 main cases:
 * comitting the freshly-installed Drupal site into a git repo
 * deploying existing Drupal codebase and SQL dump 
 
-## Fresh Drupal install
+## Deploying a fresh Drupal install
 
 For this case, there is nothing to do. Simply run `vagrant up` and the
 `deploy-drupal` cookbook will download the latest stable version of D7,
@@ -36,7 +36,7 @@ If you don't customize the settings in `Vagrantfile`, then:
 * In the host, `PROJECTROOT/db` is a synced folder linked to `/home/varant/drush-backups`
 * The VM will mount your PROJECTROOT (this folder) in /vagrant
 
-## Comitting freshly-installed Drupal site into a git repo
+## Creating project repo
 
 After the initial deployment, it's recommended to commit the newly created site
 to a newly-created git repo, as follows:
@@ -109,9 +109,9 @@ At this point,
 
 These are a few pre-requisites to install:
 
-* Then install Virtualbox 4.2+ from https://www.virtualbox.org/wiki/Downloads
-* Then install Vagrant from http://downloads.vagrantup.com/
-* Then install the berkshelf plugin, via `vagrant plugin install vagrant-berkshelf`
+* install Virtualbox 4.2+ from https://www.virtualbox.org/wiki/Downloads
+* install Vagrant 1.2+ from http://downloads.vagrantup.com/
+* install the berkshelf plugin, via `vagrant plugin install vagrant-berkshelf`
 
 ### Warning
 
