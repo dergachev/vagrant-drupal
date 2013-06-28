@@ -46,7 +46,7 @@ vagrant ssh
 cd /var/shared/sites/cooked.drupal
 
 # make a backup of the site
-drush --root='./site' sql-dump --gzip --result-file='./db/dump.sql' # NB: this creates dump.sql.gz
+drush --root='/var/shared/sites/cooked.drupal/site' sql-dump --gzip --result-file='../db/dump.sql.gz'
 
 # clean up: remove README.md, etc.
 
@@ -62,18 +62,22 @@ git push -u origin master
 ```
 
 At this point, we recommend to blow away PROJECTROOT on the host, and recreate
-it from the NEWREPO.git:
+it from the NEWREPO.git, which can be done as follows:
 
 ```bash
 # exit vagrant ssh
-vagrant destroy # be sure you committed and pushed all your code & db!
-cd $PROJECTROOT/..
-mv $PROJECTROOT $PROJECTROOT-backup
-git clone https://github.com/USERNAME/NEWREPO.git $PROJECTROOT
-cd $PROJECTROOT
+git remote set-url upstream https://github.com/USERNAME/NEWREPO.git
+git pull # this will auto-merge your repo
+git push -u origin master # pushes vagrant-chef commits (including this README.md) to your new repo
 ```
 
-Now simply redeploy the Drupal dev environment from the new Drupal repository.
+Now simply redeploy the Drupal dev environment from the new Drupal repository:
+
+```bash
+# alternative: RESET_DRUPAL=1 vagrant provision
+vagrant destroy # be sure you committed and pushed all your code & db!
+vagrant up
+```
 
 ## Deploying from existing project repo
 
