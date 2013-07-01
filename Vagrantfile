@@ -21,22 +21,23 @@ Vagrant.configure("2") do |config|
     # gem install sass compass
   HEREDOC
 
-  # Installs the previously exported site code and SQL dump via deploy_drupal::default
+  # Installs the previously exported site code and SQL dump via deploy-drupal
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = ["site-cookbooks", "cookbooks"]
-    chef.add_recipe 'deploy_drupal::default'
-   
+    reset = !ENV["reset"].nil? ? ENV["reset"] : ""
     chef.json.merge!({
-      :deploy_drupal => { 
-        :sql_load_file => '/vagrant/db/dump.sql.gz', # if non-existant, DB will be initialized via 'drush si'
-        :codebase_source_path =>  "/vagrant/site", # if folder is empty, will download D7 instead
-        :dev_group => 'sudo' # TODO: 'sudo' should be default (group that owns Drupal codebase; vagrant user must be in it)
+      "deploy-drupal" => { 
+        "dev_group_members" => [ "vagrant" ], # add Vagrant default user to dev group
+        "reset" => reset, # if set to "true", provisioning starts with obliterating existing project
+        "sql_load_file" => "db/dump.sql.gz", # if non-existant, DB will be initialized via 'drush si'
+        "source_project_path" =>  "/vagrant", # if folder is empty, will download D7 instead
+        "site_path"  => "site", # "site is the default
+      },  
+      "mysql" => {
+        "server_root_password" => "root",
+        "server_debian_password" => "root",
+        "server_repl_password" => "root"
       },
-      :mysql => {
-        :server_root_password => "root",
-        :server_debian_password => "root",
-        :server_repl_password => "root"
-      }
+      "run_list" => [ "deploy-drupal" ]
     })
   end
   
