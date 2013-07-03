@@ -23,14 +23,14 @@ Vagrant.configure("2") do |config|
 
   # Installs the previously exported site code and SQL dump via deploy-drupal
   config.vm.provision :chef_solo do |chef|
-    reset = !ENV["reset"].nil? ? ENV["reset"] : ""
+    reset = ENV["reset"].nil? ? "" : ENV["reset"]
     chef.json.merge!({
       "deploy-drupal" => { 
-        "dev_group_members" => [ "vagrant" ], # add Vagrant default user to dev group
+        "dev_group_name" => "vagrant", # use Vagrant default user group as dev group
         "reset" => reset, # if set to "true", provisioning starts with obliterating existing project
-        "sql_load_file" => "db/dump.sql.gz", # if non-existant, DB will be initialized via 'drush si'
-        "source_project_path" =>  "/vagrant", # if folder is empty, will download D7 instead
-        "site_path"  => "site", # "site is the default
+        "sql_load_file" => "/vagrant/db/dump.sql.gz", # if non-existant, DB will be initialized via 'drush si', can also be relative (db/dump.sql.gz)
+        "copy_project_from" =>  "/vagrant", # if folder is empty, will download D7 instead
+        "site_path" => "site" # site is default, this can be removed
       },  
       "mysql" => {
         "server_root_password" => "root",
